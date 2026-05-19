@@ -4,8 +4,8 @@ test.describe("Authentication", () => {
   test("shows login page for unauthenticated users", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveURL(/login/);
-    await expect(page.getByText("Sign in")).toBeVisible();
-    await expect(page.getByText("Analytica")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Pulse" })).toBeVisible();
   });
 
   test("shows demo account buttons", async ({ page }) => {

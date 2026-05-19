@@ -27,7 +27,7 @@ vi.mock("bcryptjs", () => ({
 }));
 
 beforeEach(() => {
-  process.env.JWT_SECRET = "test_secret_for_unit_tests_minimum_32chars";
+  process.env.JWT_SECRET = "test_jwt";
   process.env.REFRESH_SECRET = "test_refresh_secret_for_unit_tests_min";
 });
 

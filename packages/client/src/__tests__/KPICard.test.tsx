@@ -32,11 +32,11 @@ describe("KPICard", () => {
         isLoading={true}
       />
     );
-    expect(container.querySelector(".animate-pulse")).toBeInTheDocument();
+    expect(container.querySelector(".skeleton")).toBeInTheDocument();
   });
 
   it("renders trend indicator for positive change", () => {
-    render(
+    const { container } = render(
       <KPICard
         title="MRR"
         metric={mockMetric}
@@ -44,7 +44,7 @@ describe("KPICard", () => {
       />
     );
     expect(screen.getByText(/12.5%/)).toBeInTheDocument();
-    expect(screen.getByText(/↑/)).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-up")).toBeInTheDocument();
   });
 
   it("renders downward trend for negative change", () => {
@@ -53,13 +53,13 @@ describe("KPICard", () => {
       change: -3.2,
       trend: "down",
     };
-    render(
+    const { container } = render(
       <KPICard
         title="Churn Rate"
         metric={downMetric}
         format={(v) => `${v.toFixed(1)}%`}
       />
     );
-    expect(screen.getByText(/↓/)).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-down")).toBeInTheDocument();
   });
 });

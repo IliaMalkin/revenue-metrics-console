@@ -6,6 +6,7 @@ import { savedReports } from "../db/schema";
 import { requireAuth } from "../middleware/auth";
 import { requirePermission } from "../middleware/rbac";
 import { validate } from "../middleware/validate";
+import { asyncHandler } from "../middleware/asyncHandler";
 import type { AuthenticatedRequest } from "../middleware/auth";
 
 const router = Router();
@@ -28,14 +29,14 @@ router.get(
   "/",
   requireAuth as any,
   requirePermission("reports:read") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const { user } = req as AuthenticatedRequest;
     const reports = await db
       .select()
       .from(savedReports)
       .where(or(eq(savedReports.userId, user.id), eq(savedReports.isShared, true)));
     res.json({ data: reports });
-  }
+  })
 );
 
 router.post(
@@ -43,7 +44,7 @@ router.post(
   requireAuth as any,
   requirePermission("reports:write") as any,
   validate(createReportSchema) as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const { user } = req as AuthenticatedRequest;
     const { name, config, isShared } = req.body;
 
@@ -53,14 +54,14 @@ router.post(
       .returning();
 
     res.status(201).json({ data: report });
-  }
+  })
 );
 
 router.get(
   "/:id",
   requireAuth as any,
   requirePermission("reports:read") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const report = await db
       .select()
@@ -78,14 +79,14 @@ router.get(
       return;
     }
     res.json({ data: report[0] });
-  }
+  })
 );
 
 router.delete(
   "/:id",
   requireAuth as any,
   requirePermission("reports:write") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const deleted = await db
       .delete(savedReports)
@@ -97,7 +98,7 @@ router.delete(
       return;
     }
     res.json({ message: "Report deleted" });
-  }
+  })
 );
 
 export default router;

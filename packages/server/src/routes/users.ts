@@ -7,6 +7,7 @@ import { users, roles, auditLogs } from "../db/schema";
 import { requireAuth } from "../middleware/auth";
 import { requirePermission } from "../middleware/rbac";
 import { validate } from "../middleware/validate";
+import { asyncHandler } from "../middleware/asyncHandler";
 import type { AuthenticatedRequest } from "../middleware/auth";
 
 const router = Router();
@@ -31,19 +32,19 @@ router.get(
   "/roles",
   requireAuth as any,
   requirePermission("users:read") as any,
-  async (_req, res) => {
+  asyncHandler(async (_req, res) => {
     const result = await db
       .select({ id: roles.id, name: roles.name })
       .from(roles);
     res.json({ data: result });
-  }
+  })
 );
 
 router.get(
   "/",
   requireAuth as any,
   requirePermission("users:read") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const result = await db
       .select({
         id: users.id,
@@ -61,7 +62,7 @@ router.get(
       .innerJoin(roles, eq(users.roleId, roles.id));
 
     res.json({ data: result });
-  }
+  })
 );
 
 const updateRoleSchema = z.object({ roleId: z.number().int().positive() });
@@ -71,7 +72,7 @@ router.patch(
   requireAuth as any,
   requirePermission("users:manage") as any,
   validate(updateRoleSchema) as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const { roleId } = req.body;
 
@@ -88,14 +89,14 @@ router.patch(
 
     await logAudit(user.id, "user.role_changed", "user", req.params.id, { newRoleId: roleId });
     res.json({ data: updated });
-  }
+  })
 );
 
 router.patch(
   "/:id/status",
   requireAuth as any,
   requirePermission("users:manage") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const { isActive } = req.body;
 
@@ -113,14 +114,14 @@ router.patch(
     const action = isActive ? "user.activated" : "user.deactivated";
     await logAudit(user.id, action, "user", req.params.id);
     res.json({ data: updated });
-  }
+  })
 );
 
 router.delete(
   "/:id",
   requireAuth as any,
   requirePermission("users:manage") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     if (req.params.id === user.id) {
       res.status(400).json({ error: "Cannot delete yourself" });
@@ -139,14 +140,14 @@ router.delete(
 
     await logAudit(user.id, "user.deleted", "user", req.params.id);
     res.json({ message: "User deleted" });
-  }
+  })
 );
 
 router.get(
   "/audit-logs",
   requireAuth as any,
   requirePermission("users:manage") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const page = parseInt(String(req.query.page ?? "1"));
     const pageSize = Math.min(parseInt(String(req.query.pageSize ?? "50")), 100);
     const offset = (page - 1) * pageSize;
@@ -172,7 +173,7 @@ router.get(
     ]);
 
     res.json({ data: logs, total, page, pageSize, totalPages: Math.ceil(total / pageSize) });
-  }
+  })
 );
 
 export default router;

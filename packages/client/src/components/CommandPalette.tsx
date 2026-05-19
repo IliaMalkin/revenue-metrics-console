@@ -33,6 +33,12 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     <I size={15} strokeWidth={1.8} />
   );
 
+  function toggleDarkMode() {
+    const next = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  }
+
   const commands: Command[] = [
     { id: "overview",    label: "Overview",          description: "Main dashboard",          icon: icon(LayoutDashboard), group: "Navigate", keywords: "home main",              action: () => navigate({ to: "/dashboard" }) },
     { id: "revenue",     label: "Revenue",            description: "Revenue analytics",       icon: icon(TrendingUp),      group: "Navigate", keywords: "mrr money earnings",     action: () => navigate({ to: "/dashboard/revenue" }) },
@@ -40,8 +46,8 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     { id: "reports",     label: "Reports",            description: "Build & save reports",    icon: icon(FileBarChart),    group: "Navigate", keywords: "export csv pdf",         action: () => navigate({ to: "/dashboard/reports" }) },
     { id: "settings",    label: "Settings",           description: "Profile & preferences",   icon: icon(Settings),        group: "Navigate", keywords: "profile account",        action: () => navigate({ to: "/dashboard/settings" }) },
     { id: "admin-users", label: "Admin: Users",       description: "Manage users & roles",    icon: icon(UserCog),         group: "Admin",    keywords: "admin manage deactivate", action: () => navigate({ to: "/admin/users" }) },
-    { id: "darkmode",    label: "Toggle Dark Mode",   description: "Switch light / dark",     icon: icon(Moon),            group: "Actions",  keywords: "theme light dark",       action: () => document.documentElement.classList.toggle("dark") },
-    { id: "logout",      label: "Logout",             description: "Sign out of Analytica",   icon: icon(LogOut),          group: "Actions",  keywords: "sign out exit",          action: () => { logout(); navigate({ to: "/login" }); } },
+    { id: "darkmode",    label: "Toggle Dark Mode",   description: "Switch light / dark",     icon: icon(Moon),            group: "Actions",  keywords: "theme light dark",       action: toggleDarkMode },
+    { id: "logout",      label: "Logout",             description: "Sign out of Pulse",       icon: icon(LogOut),          group: "Actions",  keywords: "sign out exit",          action: () => { logout(); navigate({ to: "/login" }); } },
   ];
 
   const filtered = query

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { requireAuth } from "../middleware/auth";
 import { requirePermission } from "../middleware/rbac";
+import { asyncHandler } from "../middleware/asyncHandler";
 import type { AuthenticatedRequest } from "../middleware/auth";
 import type { MetricFilters } from "@dashboard/shared";
 import * as metricsService from "../services/metricsService";
@@ -28,45 +29,45 @@ router.get(
   "/overview",
   requireAuth as any,
   requirePermission("metrics:read") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const filters = parseFilters(req.query as any);
     const data = await metricsService.getOverviewMetrics(filters);
     res.json({ data });
-  }
+  })
 );
 
 router.get(
   "/revenue/timeseries",
   requireAuth as any,
   requirePermission("metrics:read") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const months = parseInt(String(req.query.months ?? "12"));
     const filters = parseFilters(req.query as any);
     const data = await metricsService.getRevenueTimeseries(months, filters);
     res.json({ data });
-  }
+  })
 );
 
 router.get(
   "/distribution/plans",
   requireAuth as any,
   requirePermission("metrics:read") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const filters = parseFilters(req.query as any);
     const data = await metricsService.getPlanDistribution(filters);
     res.json({ data });
-  }
+  })
 );
 
 router.get(
   "/distribution/countries",
   requireAuth as any,
   requirePermission("metrics:read") as any,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const filters = parseFilters(req.query as any);
     const data = await metricsService.getCountryDistribution(filters);
     res.json({ data });
-  }
+  })
 );
 
 export default router;

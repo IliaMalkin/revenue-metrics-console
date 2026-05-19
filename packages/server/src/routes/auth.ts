@@ -7,6 +7,7 @@ import { users, roles, refreshTokens } from "../db/schema";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt";
 import { validate } from "../middleware/validate";
 import { requireAuth } from "../middleware/auth";
+import { asyncHandler } from "../middleware/asyncHandler";
 import type { AuthenticatedRequest } from "../middleware/auth";
 import type { Role, RoleName } from "@dashboard/shared";
 
@@ -28,7 +29,7 @@ const registerSchema = z.object({
   roleId: z.union([z.number().int().positive(), z.string()]).optional(),
 });
 
-router.post("/register", validate(registerSchema), async (req, res) => {
+router.post("/register", validate(registerSchema), asyncHandler(async (req, res) => {
   const { email, password, fullName, roleId } = req.body as z.infer<typeof registerSchema>;
 
   // Check if email is already taken
@@ -99,9 +100,9 @@ router.post("/register", validate(registerSchema), async (req, res) => {
     fullName: newUser.fullName,
     role: roleResult[0] ?? { id: resolvedRoleId, name: "viewer" },
   });
-});
+}));
 
-router.post("/login", validate(loginSchema), async (req, res) => {
+router.post("/login", validate(loginSchema), asyncHandler(async (req, res) => {
   const { email, password } = req.body as z.infer<typeof loginSchema>;
 
   const result = await db
@@ -169,9 +170,9 @@ router.post("/login", validate(loginSchema), async (req, res) => {
       },
     },
   });
-});
+}));
 
-router.post("/refresh", validate(refreshSchema), async (req, res) => {
+router.post("/refresh", validate(refreshSchema), asyncHandler(async (req, res) => {
   const { refreshToken } = req.body as z.infer<typeof refreshSchema>;
 
   try {
@@ -216,15 +217,15 @@ router.post("/refresh", validate(refreshSchema), async (req, res) => {
   } catch {
     res.status(401).json({ error: "Invalid refresh token" });
   }
-});
+}));
 
-router.post("/logout", requireAuth as any, async (req, res) => {
+router.post("/logout", requireAuth as any, asyncHandler(async (req, res) => {
   const { refreshToken } = req.body;
   if (refreshToken) {
     await db.delete(refreshTokens).where(eq(refreshTokens.token, refreshToken));
   }
   res.json({ message: "Logged out" });
-});
+}));
 
 router.get("/me", requireAuth as any, (req, res) => {
   const { user } = req as AuthenticatedRequest;
@@ -236,7 +237,7 @@ const changePasswordSchema = z.object({
   newPassword: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-router.post("/change-password", requireAuth as any, validate(changePasswordSchema), async (req, res) => {
+router.post("/change-password", requireAuth as any, validate(changePasswordSchema), asyncHandler(async (req, res) => {
   const { user } = req as AuthenticatedRequest;
   const { currentPassword, newPassword } = req.body as z.infer<typeof changePasswordSchema>;
 
@@ -261,6 +262,6 @@ router.post("/change-password", requireAuth as any, validate(changePasswordSchem
   await db.update(users).set({ passwordHash: newHash }).where(eq(users.id, user.id));
 
   res.json({ message: "Password updated successfully" });
-});
+}));
 
 export default router;
