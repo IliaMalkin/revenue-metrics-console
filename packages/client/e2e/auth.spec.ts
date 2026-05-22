@@ -5,7 +5,7 @@ test.describe("Authentication", () => {
     await page.goto("/");
     await expect(page).toHaveURL(/login/);
     await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Pulse" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Revenue Metrics" })).toBeVisible();
   });
 
   test("shows demo account buttons", async ({ page }) => {

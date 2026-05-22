@@ -1,7 +1,7 @@
-# Pulse — SaaS Analytics Platform
+# Revenue Metrics Console
 
-> Full-stack B2B analytics dashboard for SaaS revenue teams.
-> Think ChartMogul / Baremetrics — built from scratch as a portfolio showcase.
+> Internal revenue analytics tool for subscription teams.
+> Built as a production-shaped metrics console: backend calculations, role-based access, reports, CSV export, and live updates.
 
 ![Stack](https://img.shields.io/badge/stack-React%20%7C%20Node.js%20%7C%20PostgreSQL-6366f1)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)
@@ -70,8 +70,8 @@ A production-shaped monorepo with a real backend, a real database, JWT auth with
 
 ```bash
 # 1. Clone
-git clone https://github.com/kudnever/pulse-analytics.git
-cd pulse-analytics
+git clone https://github.com/kudnever/revenue-metrics-console.git
+cd revenue-metrics-console
 
 # 2. Install dependencies
 pnpm install
@@ -115,7 +115,7 @@ Copy-Item packages/server/.env.example packages/server/.env
 ## Project Structure
 
 ```
-saas-dashboard/
+revenue-metrics-console/
 ├── packages/
 │   ├── client/          # React app (Vite)
 │   │   └── src/

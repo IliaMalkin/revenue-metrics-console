@@ -47,7 +47,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     { id: "settings",    label: "Settings",           description: "Profile & preferences",   icon: icon(Settings),        group: "Navigate", keywords: "profile account",        action: () => navigate({ to: "/dashboard/settings" }) },
     { id: "admin-users", label: "Admin: Users",       description: "Manage users & roles",    icon: icon(UserCog),         group: "Admin",    keywords: "admin manage deactivate", action: () => navigate({ to: "/admin/users" }) },
     { id: "darkmode",    label: "Toggle Dark Mode",   description: "Switch light / dark",     icon: icon(Moon),            group: "Actions",  keywords: "theme light dark",       action: toggleDarkMode },
-    { id: "logout",      label: "Logout",             description: "Sign out of Pulse",       icon: icon(LogOut),          group: "Actions",  keywords: "sign out exit",          action: () => { logout(); navigate({ to: "/login" }); } },
+    { id: "logout",      label: "Logout",             description: "Sign out of Revenue Metrics", icon: icon(LogOut),       group: "Actions",  keywords: "sign out exit",          action: () => { logout(); navigate({ to: "/login" }); } },
   ];
 
   const filtered = query

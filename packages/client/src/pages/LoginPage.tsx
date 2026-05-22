@@ -74,8 +74,8 @@ export function LoginPage() {
               <Zap size={26} className="text-white" strokeWidth={2.5} />
             </div>
           </div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Pulse</h1>
-          <p className="text-sm text-slate-500 mt-1">Analytics Platform</p>
+          <h1 className="text-2xl font-semibold text-white tracking-tight">Revenue Metrics</h1>
+          <p className="text-sm text-slate-500 mt-1">Internal analytics console</p>
         </div>
 
         {/* Card */}

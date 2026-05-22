@@ -1,5 +1,5 @@
 {
-  "name": "saas-dashboard",
+  "name": "revenue-metrics-console",
   "private": true,
   "scripts": {
     "dev": "concurrently \"pnpm --filter server dev\" \"pnpm --filter client dev\"",

@@ -35,7 +35,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="px-5 h-16 flex items-center gap-2 border-b border-white/[0.06]">
         <Zap size={15} className="text-slate-300" strokeWidth={2} />
-        <span className="text-[15px] font-semibold text-white tracking-tight">Pulse</span>
+        <span className="text-[15px] font-semibold text-white tracking-tight">Revenue Metrics</span>
       </div>
 
       {/* Nav */}
