@@ -2,7 +2,6 @@ import { Router } from "express";
 import { requireAuth } from "../middleware/auth";
 import { requirePermission } from "../middleware/rbac";
 import { asyncHandler } from "../middleware/asyncHandler";
-import type { AuthenticatedRequest } from "../middleware/auth";
 import type { MetricFilters } from "@dashboard/shared";
 import * as metricsService from "../services/metricsService";
 

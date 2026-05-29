@@ -4,7 +4,7 @@ import type { Server } from "http";
 import { verifyAccessToken } from "../utils/jwt";
 import { getLiveMetrics } from "../services/metricsService";
 import { db } from "../db/client";
-import { customers, transactions, events } from "../db/schema";
+import { transactions, events } from "../db/schema";
 import { faker } from "@faker-js/faker";
 import type { WsServerMessage, WsClientMessage } from "@dashboard/shared";
 
@@ -14,9 +14,6 @@ interface AuthenticatedWs extends WebSocket {
 }
 
 let wss: WebSocketServer;
-let simulatorInterval: ReturnType<typeof setInterval> | null = null;
-let metricsInterval: ReturnType<typeof setInterval> | null = null;
-let pingInterval: ReturnType<typeof setInterval> | null = null;
 
 function broadcast(message: WsServerMessage) {
   if (!wss) return;
@@ -72,7 +69,7 @@ export function setupWebSocket(server: Server) {
   });
 
   // Ping/pong heartbeat
-  pingInterval = setInterval(() => {
+  setInterval(() => {
     wss.clients.forEach((client) => {
       const ws = client as AuthenticatedWs;
       if (!ws.isAlive) {
@@ -85,7 +82,7 @@ export function setupWebSocket(server: Server) {
   }, 30000);
 
   // Broadcast live metrics every 5 seconds
-  metricsInterval = setInterval(async () => {
+  setInterval(async () => {
     if (wss.clients.size === 0) return;
     try {
       const metrics = await getLiveMetrics();
@@ -100,12 +97,12 @@ export function setupWebSocket(server: Server) {
 
   function startSimulator() {
     const delay = 8000 + Math.random() * 12000; // slower: 8-20 seconds
-    simulatorInterval = setTimeout(async () => {
+    setTimeout(async () => {
       if (simulatorEnabled) {
         await simulateEvent();
       }
       startSimulator();
-    }, delay) as any;
+    }, delay);
   }
 
   startSimulator();

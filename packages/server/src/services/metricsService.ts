@@ -1,5 +1,5 @@
 import { db } from "../db/client";
-import { customers, transactions, events } from "../db/schema";
+import { customers, transactions } from "../db/schema";
 import {
   and,
   gte,
@@ -9,12 +9,10 @@ import {
   sql,
   count,
   desc,
-  asc,
 } from "drizzle-orm";
 import type {
   MetricFilters,
   OverviewMetrics,
-  KPIMetric,
   RevenueTimeseries,
   PlanDistribution,
   CountryDistribution,
@@ -129,7 +127,7 @@ export async function getOverviewMetrics(filters: MetricFilters): Promise<Overvi
 
 export async function getRevenueTimeseries(
   months = 12,
-  filters: MetricFilters = {}
+  _filters: MetricFilters = {}
 ): Promise<RevenueTimeseries[]> {
   const result: RevenueTimeseries[] = [];
   const now = new Date();

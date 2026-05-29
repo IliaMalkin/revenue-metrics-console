@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import bcrypt from "bcryptjs";
-import { eq, ne, count } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { db } from "../db/client";
 import { users, roles, auditLogs } from "../db/schema";
 import { requireAuth } from "../middleware/auth";

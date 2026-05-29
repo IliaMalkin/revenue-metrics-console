@@ -12,9 +12,6 @@ import {
 import type { Permission } from "@dashboard/shared";
 
 // date-fns helpers (inline to avoid import issues)
-function subD(date: Date, days: number): Date {
-  return new Date(date.getTime() - days * 24 * 60 * 60 * 1000);
-}
 function subM(date: Date, months: number): Date {
   const d = new Date(date);
   d.setMonth(d.getMonth() - months);
@@ -139,7 +136,6 @@ async function seed() {
 
   // 4. Transactions (5000+)
   console.log("Creating transactions...");
-  const TRANSACTION_TYPES = ["payment", "refund", "upgrade", "downgrade"] as const;
   const transactionData: typeof transactions.$inferInsert[] = [];
 
   for (const customer of insertedCustomers) {

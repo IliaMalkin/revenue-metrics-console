@@ -1,6 +1,6 @@
 import { db } from "../db/client";
-import { customers, transactions, events } from "../db/schema";
-import { and, gte, lte, inArray, eq, sql, count, sum, avg } from "drizzle-orm";
+import { customers } from "../db/schema";
+import { and, gte, lte, inArray, eq, sql, count } from "drizzle-orm";
 import type { MetricFilters } from "@dashboard/shared";
 
 export function buildCustomerFilter(filters: MetricFilters) {
