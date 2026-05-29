@@ -18,12 +18,6 @@ A production-shaped monorepo with a real backend, a real database, JWT auth with
 - **Real-time** transactions feed via WebSocket — updates without polling.
 - **Tested** with Vitest (unit) + Playwright (e2e).
 
-## Screenshots
-
-![Overview](docs/screenshots/overview.png)
-![Cohort heatmap](docs/screenshots/cohorts.png)
-![Admin panel](docs/screenshots/admin.png)
-
 ## Features
 
 **Analytics**
