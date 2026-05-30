@@ -64,7 +64,7 @@ A production-shaped monorepo with a real backend, a real database, JWT auth with
 
 ```bash
 # 1. Clone
-git clone https://github.com/kudnever/revenue-metrics-console.git
+git clone https://github.com/IliaMalkin/revenue-metrics-console.git
 cd revenue-metrics-console
 
 # 2. Install dependencies
