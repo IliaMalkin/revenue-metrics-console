@@ -124,12 +124,10 @@ test.describe("Reports CRUD", () => {
     await page.getByRole("button", { name: "Save Report" }).click();
     await expect(page.getByText(reportName)).toBeVisible({ timeout: 5000 });
 
-    // Then delete: locate the row container that contains both the name and a Delete button
-    const row = page
-      .locator("div")
-      .filter({ hasText: reportName })
-      .filter({ has: page.getByRole("button", { name: "Delete" }) })
-      .first();
+    // Then delete: scope to the actual row container (div.px-5.py-4 per ReportsPage),
+    // otherwise ancestor divs also match hasText and the query resolves to every
+    // other row's Delete button.
+    const row = page.locator("div.px-5.py-4").filter({ hasText: reportName });
     await row.getByRole("button", { name: "Delete" }).click();
     await expect(page.getByText(reportName)).not.toBeVisible({ timeout: 5000 });
   });
