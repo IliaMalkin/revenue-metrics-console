@@ -48,9 +48,10 @@ test.describe("Dashboard access (requires auth)", () => {
   });
 
   test("shows sidebar navigation", async ({ page }) => {
-    await expect(page.getByText("Overview")).toBeVisible();
-    await expect(page.getByText("Revenue")).toBeVisible();
-    await expect(page.getByText("Reports")).toBeVisible();
+    const nav = page.getByRole("navigation");
+    await expect(nav.getByText("Overview")).toBeVisible();
+    await expect(nav.getByText("Revenue")).toBeVisible();
+    await expect(nav.getByText("Reports")).toBeVisible();
   });
 
   test("shows KPI cards", async ({ page }) => {
@@ -60,18 +61,22 @@ test.describe("Dashboard access (requires auth)", () => {
   });
 
   test("filter bar is visible", async ({ page }) => {
-    await expect(page.getByText(/Date Range|Last \d+d/)).toBeVisible();
-    await expect(page.getByText("Plan")).toBeVisible();
+    // Plan filter button is stable
+    await expect(page.getByRole("button", { name: "Plan" })).toBeVisible();
+    // Date filter button label is a formatted range like "May 1 – May 30"
+    await expect(
+      page.getByRole("button", { name: /\w{3}\s+\d+\s+[–-]\s+\w{3}\s+\d+/ })
+    ).toBeVisible();
   });
 
   test("can navigate to revenue page", async ({ page }) => {
-    await page.getByText("Revenue").click();
+    await page.getByRole("navigation").getByText("Revenue").click();
     await expect(page).toHaveURL(/revenue/);
-    await expect(page.getByText("Revenue Analytics")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Revenue Analytics" })).toBeVisible();
   });
 
   test("can navigate to reports page", async ({ page }) => {
-    await page.getByText("Reports").click();
+    await page.getByRole("navigation").getByText("Reports").click();
     await expect(page).toHaveURL(/reports/);
     await expect(page.getByText("Report Builder")).toBeVisible();
   });
@@ -89,7 +94,11 @@ test.describe("RBAC - Viewer restrictions", () => {
   });
 
   test("viewer sees their role in header", async ({ page }) => {
-    await expect(page.getByText(/viewer/i)).toBeVisible();
+    // role.name is the literal string "viewer"; scope to header and require exact
+    // match so we do not collide with "Viewer User" (fullName) or sidebar items.
+    await expect(
+      page.getByRole("banner").getByText("viewer", { exact: true })
+    ).toBeVisible();
   });
 });
 
@@ -115,8 +124,12 @@ test.describe("Reports CRUD", () => {
     await page.getByRole("button", { name: "Save Report" }).click();
     await expect(page.getByText(reportName)).toBeVisible({ timeout: 5000 });
 
-    // Then delete
-    const row = page.getByText(reportName).locator("..");
+    // Then delete: locate the row container that contains both the name and a Delete button
+    const row = page
+      .locator("div")
+      .filter({ hasText: reportName })
+      .filter({ has: page.getByRole("button", { name: "Delete" }) })
+      .first();
     await row.getByRole("button", { name: "Delete" }).click();
     await expect(page.getByText(reportName)).not.toBeVisible({ timeout: 5000 });
   });
