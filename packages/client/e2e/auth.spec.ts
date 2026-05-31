@@ -117,7 +117,7 @@ test.describe("Reports CRUD", () => {
 
     // Then delete
     const row = page.getByText(reportName).locator("xpath=ancestor::div[contains(@class, 'px-5') and contains(@class, 'py-4')][1]");
-    await row.getByRole("button", { name: "Delete" }).click();
+    await row.getByRole("button", { name: "Delete", exact: true }).click();
     await expect(page.getByText(reportName)).not.toBeVisible({ timeout: 5000 });
   });
 });
