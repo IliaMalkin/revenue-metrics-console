@@ -48,9 +48,9 @@ test.describe("Dashboard access (requires auth)", () => {
   });
 
   test("shows sidebar navigation", async ({ page }) => {
-    await expect(page.getByText("Overview")).toBeVisible();
-    await expect(page.getByText("Revenue")).toBeVisible();
-    await expect(page.getByText("Reports")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Overview" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Revenue" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Reports" })).toBeVisible();
   });
 
   test("shows KPI cards", async ({ page }) => {
@@ -60,20 +60,20 @@ test.describe("Dashboard access (requires auth)", () => {
   });
 
   test("filter bar is visible", async ({ page }) => {
-    await expect(page.getByText(/Date Range|Last \d+d/)).toBeVisible();
-    await expect(page.getByText("Plan")).toBeVisible();
+    await expect(page.getByRole("button", { name: /[A-Z][a-z]{2} \d+.*[A-Z][a-z]{2} \d+/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Plan/ })).toBeVisible();
   });
 
   test("can navigate to revenue page", async ({ page }) => {
-    await page.getByText("Revenue").click();
+    await page.getByRole("link", { name: "Revenue" }).click();
     await expect(page).toHaveURL(/revenue/);
-    await expect(page.getByText("Revenue Analytics")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Revenue Analytics" })).toBeVisible();
   });
 
   test("can navigate to reports page", async ({ page }) => {
-    await page.getByText("Reports").click();
+    await page.getByRole("link", { name: "Reports" }).click();
     await expect(page).toHaveURL(/reports/);
-    await expect(page.getByText("Report Builder")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Report Builder" })).toBeVisible();
   });
 });
 
@@ -89,7 +89,7 @@ test.describe("RBAC - Viewer restrictions", () => {
   });
 
   test("viewer sees their role in header", async ({ page }) => {
-    await expect(page.getByText(/viewer/i)).toBeVisible();
+    await expect(page.getByRole("banner").getByText("viewer", { exact: true })).toBeVisible();
   });
 });
 
@@ -116,7 +116,7 @@ test.describe("Reports CRUD", () => {
     await expect(page.getByText(reportName)).toBeVisible({ timeout: 5000 });
 
     // Then delete
-    const row = page.getByText(reportName).locator("..");
+    const row = page.getByText(reportName).locator("xpath=ancestor::div[contains(@class, 'px-5') and contains(@class, 'py-4')][1]");
     await row.getByRole("button", { name: "Delete" }).click();
     await expect(page.getByText(reportName)).not.toBeVisible({ timeout: 5000 });
   });
