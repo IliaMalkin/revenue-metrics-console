@@ -1,0 +1,56 @@
+name: Screenshots
+
+on:
+  workflow_dispatch:
+
+jobs:
+  capture:
+    name: Capture dashboard screenshots
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: saas_dashboard_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @dashboard/shared build
+      - name: Run DB migrations and seed
+        run: |
+          pnpm --filter server db:generate
+          pnpm --filter server db:migrate
+          pnpm --filter server db:seed
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/saas_dashboard_test
+          JWT_SECRET: test_secret_for_ci_minimum_32_characters
+          REFRESH_SECRET: test_refresh_secret_for_ci_min_32_chars
+      - name: Install Playwright browsers
+        run: pnpm --filter client exec playwright install chromium --with-deps
+      - name: Capture screenshots
+        run: pnpm --filter client screenshots
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/saas_dashboard_test
+          JWT_SECRET: test_secret_for_ci_minimum_32_characters
+          REFRESH_SECRET: test_refresh_secret_for_ci_min_32_chars
+          CORS_ORIGIN: http://localhost:5173
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: docs/screenshots/*.png
