@@ -3,6 +3,7 @@
 > Internal revenue analytics tool for subscription teams.
 > Built as a production-shaped metrics console: backend calculations, role-based access, reports, CSV export, and live updates.
 
+![CI](https://github.com/IliaMalkin/revenue-metrics-console/actions/workflows/ci.yml/badge.svg?branch=main)
 ![Stack](https://img.shields.io/badge/stack-React%20%7C%20Node.js%20%7C%20PostgreSQL-6366f1)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)
 ![Tests](https://img.shields.io/badge/tests-Vitest%20%2B%20Playwright-22c55e)
@@ -17,6 +18,16 @@ A production-shaped monorepo with a real backend, a real database, JWT auth with
 - **3 roles** (Admin / Manager / Viewer) with granular endpoint-level permissions.
 - **Real-time** transactions feed via WebSocket — updates without polling.
 - **Tested** with Vitest (unit) + Playwright (e2e).
+
+## Screenshots
+
+| Dashboard overview | Dark mode |
+| --- | --- |
+| ![Dashboard overview](docs/screenshots/overview.png) | ![Dashboard overview, dark mode](docs/screenshots/overview-dark.png) |
+
+| Cohort retention heatmap | Admin panel |
+| --- | --- |
+| ![Cohort retention heatmap](docs/screenshots/cohorts.png) | ![Admin user management](docs/screenshots/admin.png) |
 
 ## Features
 

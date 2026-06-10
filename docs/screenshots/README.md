@@ -1,4 +1,4 @@
-Run the screenshot capture after PostgreSQL has been started, migrated, and seeded:
+﻿Run the screenshot capture after PostgreSQL has been started, migrated, and seeded:
 
 ```powershell
 docker compose up -d
@@ -14,4 +14,4 @@ The script writes:
 - `docs/screenshots/admin.png`
 - `docs/screenshots/overview-dark.png`
 
-Screenshots were not generated in this environment because Docker/PostgreSQL was unavailable.
+Screenshots can also be regenerated in CI via the manual `Screenshots` workflow (Actions tab), which boots a seeded Postgres service and uploads the PNGs as an artifact.
