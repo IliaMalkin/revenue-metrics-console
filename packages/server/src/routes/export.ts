@@ -26,8 +26,8 @@ function toCSV(rows: Record<string, unknown>[]): string {
 
 router.get(
   "/csv/transactions",
-  requireAuth as any,
-  requirePermission("reports:export") as any,
+  requireAuth,
+  requirePermission("reports:export"),
   asyncHandler(async (req, res) => {
     const { data } = await metricsService.getTransactionsList(1, 10000, {
       dateFrom: req.query.dateFrom as string | undefined,
@@ -46,8 +46,8 @@ router.get(
 
 router.get(
   "/csv/revenue",
-  requireAuth as any,
-  requirePermission("reports:export") as any,
+  requireAuth,
+  requirePermission("reports:export"),
   asyncHandler(async (req, res) => {
     const months = parseInt(String(req.query.months ?? "12"));
     const data = await metricsService.getRevenueTimeseries(months);

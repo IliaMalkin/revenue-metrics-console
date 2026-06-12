@@ -27,8 +27,8 @@ const createReportSchema = z.object({
 
 router.get(
   "/",
-  requireAuth as any,
-  requirePermission("reports:read") as any,
+  requireAuth,
+  requirePermission("reports:read"),
   asyncHandler(async (req, res) => {
     const { user } = req as AuthenticatedRequest;
     const reports = await db
@@ -41,9 +41,9 @@ router.get(
 
 router.post(
   "/",
-  requireAuth as any,
-  requirePermission("reports:write") as any,
-  validate(createReportSchema) as any,
+  requireAuth,
+  requirePermission("reports:write"),
+  validate(createReportSchema),
   asyncHandler(async (req, res) => {
     const { user } = req as AuthenticatedRequest;
     const { name, config, isShared } = req.body;
@@ -59,8 +59,8 @@ router.post(
 
 router.get(
   "/:id",
-  requireAuth as any,
-  requirePermission("reports:read") as any,
+  requireAuth,
+  requirePermission("reports:read"),
   asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const report = await db
@@ -84,8 +84,8 @@ router.get(
 
 router.delete(
   "/:id",
-  requireAuth as any,
-  requirePermission("reports:write") as any,
+  requireAuth,
+  requirePermission("reports:write"),
   asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const deleted = await db

@@ -23,14 +23,14 @@ async function logAudit(
     action,
     targetType,
     targetId,
-    metadata: metadata as any,
+    metadata: metadata as Record<string, string>,
   });
 }
 
 router.get(
   "/roles",
-  requireAuth as any,
-  requirePermission("users:read") as any,
+  requireAuth,
+  requirePermission("users:read"),
   asyncHandler(async (_req, res) => {
     const result = await db
       .select({ id: roles.id, name: roles.name })
@@ -41,8 +41,8 @@ router.get(
 
 router.get(
   "/",
-  requireAuth as any,
-  requirePermission("users:read") as any,
+  requireAuth,
+  requirePermission("users:read"),
   asyncHandler(async (req, res) => {
     const result = await db
       .select({
@@ -68,9 +68,9 @@ const updateRoleSchema = z.object({ roleId: z.number().int().positive() });
 
 router.patch(
   "/:id/role",
-  requireAuth as any,
-  requirePermission("users:manage") as any,
-  validate(updateRoleSchema) as any,
+  requireAuth,
+  requirePermission("users:manage"),
+  validate(updateRoleSchema),
   asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const { roleId } = req.body;
@@ -93,8 +93,8 @@ router.patch(
 
 router.patch(
   "/:id/status",
-  requireAuth as any,
-  requirePermission("users:manage") as any,
+  requireAuth,
+  requirePermission("users:manage"),
   asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     const { isActive } = req.body;
@@ -118,8 +118,8 @@ router.patch(
 
 router.delete(
   "/:id",
-  requireAuth as any,
-  requirePermission("users:manage") as any,
+  requireAuth,
+  requirePermission("users:manage"),
   asyncHandler(async (req, res) => {
     const { user } = req as unknown as AuthenticatedRequest;
     if (req.params.id === user.id) {
@@ -144,8 +144,8 @@ router.delete(
 
 router.get(
   "/audit-logs",
-  requireAuth as any,
-  requirePermission("users:manage") as any,
+  requireAuth,
+  requirePermission("users:manage"),
   asyncHandler(async (req, res) => {
     const page = parseInt(String(req.query.page ?? "1"));
     const pageSize = Math.min(parseInt(String(req.query.pageSize ?? "50")), 100);

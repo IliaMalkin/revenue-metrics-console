@@ -219,7 +219,7 @@ router.post("/refresh", validate(refreshSchema), asyncHandler(async (req, res) =
   }
 }));
 
-router.post("/logout", requireAuth as any, asyncHandler(async (req, res) => {
+router.post("/logout", requireAuth, asyncHandler(async (req, res) => {
   const { refreshToken } = req.body;
   if (refreshToken) {
     await db.delete(refreshTokens).where(eq(refreshTokens.token, refreshToken));
@@ -227,7 +227,7 @@ router.post("/logout", requireAuth as any, asyncHandler(async (req, res) => {
   res.json({ message: "Logged out" });
 }));
 
-router.get("/me", requireAuth as any, (req, res) => {
+router.get("/me", requireAuth, (req, res) => {
   const { user } = req as AuthenticatedRequest;
   res.json({ user });
 });
@@ -237,7 +237,7 @@ const changePasswordSchema = z.object({
   newPassword: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-router.post("/change-password", requireAuth as any, validate(changePasswordSchema), asyncHandler(async (req, res) => {
+router.post("/change-password", requireAuth, validate(changePasswordSchema), asyncHandler(async (req, res) => {
   const { user } = req as AuthenticatedRequest;
   const { currentPassword, newPassword } = req.body as z.infer<typeof changePasswordSchema>;
 

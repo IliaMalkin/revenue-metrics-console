@@ -26,10 +26,10 @@ function parseFilters(query: Record<string, string | string[] | undefined>): Met
 
 router.get(
   "/overview",
-  requireAuth as any,
-  requirePermission("metrics:read") as any,
+  requireAuth,
+  requirePermission("metrics:read"),
   asyncHandler(async (req, res) => {
-    const filters = parseFilters(req.query as any);
+    const filters = parseFilters(req.query as Record<string, string>);
     const data = await metricsService.getOverviewMetrics(filters);
     res.json({ data });
   })
@@ -37,11 +37,11 @@ router.get(
 
 router.get(
   "/revenue/timeseries",
-  requireAuth as any,
-  requirePermission("metrics:read") as any,
+  requireAuth,
+  requirePermission("metrics:read"),
   asyncHandler(async (req, res) => {
     const months = parseInt(String(req.query.months ?? "12"));
-    const filters = parseFilters(req.query as any);
+    const filters = parseFilters(req.query as Record<string, string>);
     const data = await metricsService.getRevenueTimeseries(months, filters);
     res.json({ data });
   })
@@ -49,10 +49,10 @@ router.get(
 
 router.get(
   "/distribution/plans",
-  requireAuth as any,
-  requirePermission("metrics:read") as any,
+  requireAuth,
+  requirePermission("metrics:read"),
   asyncHandler(async (req, res) => {
-    const filters = parseFilters(req.query as any);
+    const filters = parseFilters(req.query as Record<string, string>);
     const data = await metricsService.getPlanDistribution(filters);
     res.json({ data });
   })
@@ -60,10 +60,10 @@ router.get(
 
 router.get(
   "/distribution/countries",
-  requireAuth as any,
-  requirePermission("metrics:read") as any,
+  requireAuth,
+  requirePermission("metrics:read"),
   asyncHandler(async (req, res) => {
-    const filters = parseFilters(req.query as any);
+    const filters = parseFilters(req.query as Record<string, string>);
     const data = await metricsService.getCountryDistribution(filters);
     res.json({ data });
   })

@@ -8,8 +8,8 @@ const router = Router();
 
 router.get(
   "/",
-  requireAuth as any,
-  requirePermission("metrics:read") as any,
+  requireAuth,
+  requirePermission("metrics:read"),
   asyncHandler(async (req, res) => {
     const page = parseInt(String(req.query.page ?? "1"));
     const pageSize = Math.min(parseInt(String(req.query.pageSize ?? "25")), 100);

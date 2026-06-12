@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction, RequestHandler } from "express";
 import { verifyAccessToken } from "../utils/jwt";
 import { db } from "../db/client";
 import { users, roles } from "../db/schema";
@@ -9,11 +9,11 @@ export interface AuthenticatedRequest extends Request {
   user: User;
 }
 
-export async function requireAuth(
+export const requireAuth: RequestHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<void> {
+): Promise<void> => {
   const token = req.headers.authorization?.replace("Bearer ", "");
   if (!token) {
     res.status(401).json({ error: "Unauthorized" });
